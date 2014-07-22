@@ -1,0 +1,18 @@
+Untar the .tgz or tar.gz of the pussh/ directory
+wherever you prefer to run it from like so: 
+
+tar -zxpf pussh_2.2.tar.gz 
+
+and then simply run the script from there eg.
+
+[0]$ /homedir> pussh/pussh --help
+
+or
+
+[0]$ /whatever/path> ~/pussh/pussh --help
+
+Good luck, and thanks for your support.
+
+PS. There is one package dependency which not all systems have, and that is netcat aka "nc". 
+
+::: Andrei Doicin :::

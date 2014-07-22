@@ -1,0 +1,31 @@
+----------
+31/03/2014
+----------
+Pussh Version 2.2 contains even less changes than the last, but it's 
+just a warm-up for something big that cometh ... and that right soon.
+
+----------
+12/08/2010
+----------
+Pussh Version 2.1 is a small change - cleaning up superfluous protocol
+options in brussh.py, when it was noticed these stop pussh working from
+Solaris.
+
+----------
+09/04/2008
+----------
+PuSSH Version 2 has 2 dramatic new features:
+1. added overall port specification functionality. Port 22 is still
+   the default, but really, nobody uses port 22 anymore these days for 
+   SSH on machines exposed to the world; the requirement is elementary.
+2. changed a fundamental thing in brussh.py from version 1 - targets 
+   are no longer "acquired" using ping; targets are now confirmed as
+   ready to receive ssh commands using netcat, with netcat testing for
+   SSH on the port specified (see point 1); using netcat instead of
+   ping in order to acquire target hosts changes the behavior somewhat,
+   but not too badly; another obvious advantage is that target machines
+   don't need to be pingable, and as PuSSH implements it, netcat can 
+   tell if a target is up even if it won't respond to ssh, which could
+   be useful in some circumstances. 
+3. finally, some minor improvements here and there, to the help text and
+   code.
