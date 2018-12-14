@@ -1,8 +1,6 @@
 #!/usr/bin/python 
 ###########################################################
-# PuSSH - Pythonized ubiquitous SSH # Version 2.2 #########
-###########################################################
-# also works best, or only with Python 2 !!! ##############
+# PuSSH - Pythonized ubiquitous SSH # Version 2.3 #########
 ###########################################################
 # an Open Source script originally made at CERN (2003) ####
 ###########################################################
@@ -52,6 +50,9 @@ def Usage():
 
  -l <user>                      send command as user <user> ; if NOT specified, this option is SET to the user 
 				who owns the current shell.
+
+ -i				private key or .pem file; if not specified, the default is id_dsa or id_rsa ...
+				whichever comes first
 
  -r                             send command as root (a lazy way of specifying -l root ... see above).
 
@@ -115,21 +116,30 @@ def optionizer():
                                       # note: this entire function could be improved by turning it into a dictionary
                                       # ... too many "special cases" may not be good programming form, but for now, what the heck.
                                         
-    if loginspec == 1 and timeoutspec == 0 and parallel == 1: 
+    if loginspec == 1 and timeoutspec == 0 and parallel == 1 and keyspec == 1: 
+        opty = "-P ", port, "-l ", login, "-i ", key
+        # print "loginspec is 1, timeoutspec is 0, parallel is 1, and keyspec is 1"
+    if loginspec == 1 and timeoutspec == 0 and parallel == 1 and keyspec == 0:
         opty = "-P ", port, "-l ", login
-        # print "loginspec is 1, timeoutspec is 0, and parallel is 1"
-    elif loginspec == 1 and timeoutspec == 0 and parallel == 0: 
+        # print "loginspec is 1, timeoutspec is 0, parallel is 1, and keyspec is 0"
+    elif loginspec == 1 and timeoutspec == 0 and parallel == 0 and keyspec == 0: 
         opty = "-P ", port, "-l ", login, " -s "
-        # print "loginspec is 1, timeoutspec is 0, and parallel is 0"
-    elif loginspec == 1 and timeoutspec == 1 and parallel == 1: 
+        # print "loginspec is 1, timeoutspec is 0, parallel is 0, and keyspec == 0"
+    elif loginspec == 1 and timeoutspec == 1 and parallel == 1 and keyspec == 1: 
+        opty = "-P ", port, "-l ", login, " -t ", timevar, "-i ", key
+        # print "loginspec is 1, timeoutspec is 1, parallel is 1, and keyspec is 1"
+    elif loginspec == 1 and timeoutspec == 1 and parallel == 1 and keyspec == 0:
         opty = "-P ", port, "-l ", login, " -t ", timevar
-        # print "loginspec is 1, timeoutspec is 1, and parallel is 1"
+        # print "loginspec is 1, timeoutspec is 1, parallel is 1, and keyspec is 0"
     elif loginspec == 1 and timeoutspec == 1 and parallel == 0: 
         opty = "-P ", port, "-l ", login, " -t ", timevar, " -s "
         # print "loginspec is 1, timeoutspec is 1, and parallel is 0"
-    elif loginspec == 0 and timeoutspec == 1 and parallel == 1: 
+    elif loginspec == 0 and timeoutspec == 1 and parallel == 1 and keyspec == 1: 
+        opty = "-P ", port, "-t ", timevar, "-i ", key
+        # print "loginspec is 0, timeoutspec is 1, parallel is 1, and keyspec is 1"
+    elif loginspec == 0 and timeoutspec == 1 and parallel == 1 and keyspec == 0:
         opty = "-P ", port, "-t ", timevar
-        # print "loginspec is 0, timeoutspec is 1, and parallel is 1"
+        # print "loginspec is 0, timeoutspec is 1, parallel is 1, and keyspec is 0"
     elif loginspec == 0 and timeoutspec == 1 and parallel == 0: 
         opty = "-P ", port, "-t ", timevar, " -s "
         # print "loginspec is 0, timeoutspec is 1, and parallel is 0"
@@ -138,7 +148,7 @@ def optionizer():
         opty = opto = "-s"
         unique_case = 1
     else: 
-        # print "apparently nothing, but our port is ...", port
+        # print "nothing specced, but our port is ...", port
         opty = "-P ", port
     if unique_case == 0: opto = string.join(opty,' ')           # heavily crucial
     return opto, unique_case
@@ -297,6 +307,11 @@ if __name__ == "__main__":
                      
     login = os.environ['LOGNAME']         # as per above
 
+    keyspec = 0          # no private key is specified
+                         # this means ssh will try to use
+                         # whichever of id_dsa or id_rsa 
+                         # is available
+
     port = "22"
 
     progpath = DeterminePath(login)
@@ -328,7 +343,7 @@ if __name__ == "__main__":
 # Command line options pre-amble ...
 ############################################################
     try: 
-        options, arguments = getopt.getopt(sys.argv[1:],'P:l:t:p:f:rsh',['port','login','timeout','parallel','file','root','sequence','help','prefix','prefixitright'])
+        options, arguments = getopt.getopt(sys.argv[1:],'P:l:i:t:p:f:rsh',['port','login','key','timeout','parallel','file','root','sequence','help','prefix','prefixitright'])
     except getopt.error:
         print Usage.__doc__
         os._exit(1)
@@ -368,6 +383,10 @@ if __name__ == "__main__":
             loginspec = 1
             login = "root"
             # print "login now=", login
+
+        if opt[0] == '-i':
+            keyspec = 1
+            key = opt[1]
 
         if opt[0] == '-l':
             loginspec = 1

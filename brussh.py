@@ -2,8 +2,9 @@
 ###########################################################
 # BRUSSH - BASIC, RUDIMENTARY SSH WRAPPER, CALLED BY PUSSH
 ###########################################################
-# This brussh.py is part of PuSSH Version 2.2. It hasn't 
-# changed much since the brussh.py from PuSSH version 2.1.
+# This brussh.py is part of PuSSH Version 2.3. Please don't
+# confuse it with the brussh.py from PuSSH version 2, or
+# from version 1.
 ###########################################################
 # This program is free software; you can redistribute it
 # and/or modify it under the terms of the GNU General
@@ -65,7 +66,9 @@ def is_it_listening():
 # Function "the_command" - this is where the action really is ...
 ################################################################################################
 def the_command():
-    sshcmd = 'ssh ' + ssh_options + ' -p ' + port + ' -l ' + login + ' ' + machine + ' ' + payload 
+    sshcmd = 'ssh ' + ssh_options + ' -p ' + port + ' -l ' + login + ' -i ' + key + ' ' + machine + ' ' + payload 
+    print "HERE IT IS!:"
+    print sshcmd
     result = os.system(sshcmd)
     if result == 65024: os.system('echo \"X === Failed: STATUS=254 === X\"')
 
@@ -76,9 +79,13 @@ def the_command():
 ################################################################################################
 
 login = os.environ['LOGNAME']
+# key = " "
+# key = "~/.ssh/id_rsa"
+# if (not os.path.isfile(key)): key = "~/.ssh/id_dsa"
 port = "22"
 timeout_value = 60 
 t = str(timeout_value)
+print "JDJJFDSFJDSF"
 parallel = 1
 ssh_options = "-x -T -o StrictHostKeyChecking=no -o Batchmode=yes"
 
@@ -86,7 +93,7 @@ ssh_options = "-x -T -o StrictHostKeyChecking=no -o Batchmode=yes"
 # Command line options and arguments pre-amble:
 ################################################################################################
 try: 
-    options, arguments = getopt.getopt(sys.argv[1:],'P:l:t:rsh')
+    options, arguments = getopt.getopt(sys.argv[1:],'P:l:i:t:rsh')
     # print "options are", options
     # print "arguments are", arguments
 except getopt.error:
@@ -114,6 +121,8 @@ for opt in options:
         sys.exit(1)
 
     if opt[0] == '-l': login = opt[1]      # login is now officially declared 
+
+    if opt[0] == '-i': key = opt[1]        # key is now officially declared 
 
     if opt[0] == '-P': port = opt[1]       # port is now officially declared   
     
