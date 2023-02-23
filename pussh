@@ -110,7 +110,8 @@ def DeterminePath(login):
 def optionizer():
     """PUSSH options specification:
  
-    pussh [-h] [-s] [-r] [-f <filename>] [-P <sshd TCP port>] [-l <userid>] [-t <timeout value in seconds>] <target> <commands>"""
+    pussh [-h] [-s] [-p <number of targets to hit in parallel] [-r] [-f <filename>] [-i <../.ssh/keyname or keyname.pem>] \
+          [-P <sshd TCP port>] [-l <userid>] [-t <timeout value in seconds>] <target> <commands>"""
 
     unique_case = 0                   # by default, we don't expect a scenario wherein the only option is -s
                                       # note: this entire function could be improved by turning it into a dictionary
