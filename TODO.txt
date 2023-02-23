@@ -1,0 +1,7 @@
+20230223:
+
+- encode the requirement for nc
+
+- make it so you don't NEED to specify a timeout
+
+- make it so you don't NEED to specify a key
