@@ -48,14 +48,14 @@ def kill_this_dead():
 
 def is_it_listening():
     nc_cmd = 'echo QUIT | nc -zvw' + ' ' + t + ' ' + machine + ' ' + portno
-    # print nc_cmd
+    print nc_cmd
     v1,v2 = commands.getstatusoutput(nc_cmd)
-    timeout = v2.count("Connection timed out")
-    unknown = v2.count("Unknown host")
+    refused = v2.count("Connection refused")
+    unknown = v2.count("Name or service not known")
     if v1 == 0: 
         status = 0
         return status
-    elif v1 == 256 and timeout == 1: 
+    elif v1 == 256 and refused == 1: 
         status = 1
         return status
     elif v1 == 256 and unknown == 1: 
