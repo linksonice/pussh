@@ -25,7 +25,7 @@ The way to use this tool, right out of the box is like so:
 
 ```git clone https://github.com/linksonice/pussh.git
 cd pussh
-./pussh -t 4  -i ../.ssh/london.pem node0[3-7,9] uptime```
+./pussh -t 4  -i ../.ssh/london.pem node0[3-7,9] uptime
 
 which will output:
 
